@@ -66,16 +66,24 @@ GIF_URL_NEDRY = 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGNkMGx3YnNkc
 # SISTEMA DE CACHE GLOBAL (PERSISTÊNCIA)
 # ============================================
 
-@st.cache_resource
-def get_global_cache():
-    """Cache global que persiste entre recarregamentos da página"""
-    print("🔄 Inicializando cache global...")
-    return {
+# ============================================
+# FUNÇÕES AUXILIARES
+# ============================================
+
+def format_time_duration(duration):
+    if not isinstance(duration, timedelta): return '--:--:--'
+    s = int(duration.total_seconds())
+    h, s = divmod(s, 3600)
+    m, s = divmod(s, 60)
+    return f'{h:02}:{m:02}:{s:02}'
+
+def init_session_state():
+    """Inicializa o estado da sessão"""
+    defaults = {
         'bastao_queue': [],
         'status_texto': {nome: 'Indisponível' for nome in CONSULTORES},
         'bastao_start_time': None,
         'bastao_counts': {nome: 0 for nome in CONSULTORES},
-        'check_states': {nome: False for nome in CONSULTORES},
         'rotation_gif_start_time': None,
         'gif_warning': False,
         'auxilio_ativo': False,
@@ -88,113 +96,17 @@ def get_global_cache():
         'simon_ranking': [],
         'daily_logs': [],
         'last_jira_number': "",
+        'success_message': None,
+        'success_message_time': None,
     }
-
-def save_to_cache():
-    """Salva o estado atual no cache global"""
-    cache = get_global_cache()
-    try:
-        cache['bastao_queue'] = st.session_state.bastao_queue.copy()
-        cache['status_texto'] = st.session_state.status_texto.copy()
-        cache['bastao_start_time'] = st.session_state.bastao_start_time
-        cache['bastao_counts'] = st.session_state.bastao_counts.copy()
-        cache['rotation_gif_start_time'] = st.session_state.get('rotation_gif_start_time')
-        cache['gif_warning'] = st.session_state.get('gif_warning', False)
-        cache['auxilio_ativo'] = st.session_state.get('auxilio_ativo', False)
-        cache['active_view'] = st.session_state.get('active_view')
-        cache['chamado_guide_step'] = st.session_state.get('chamado_guide_step', 0)
-        cache['simon_sequence'] = st.session_state.get('simon_sequence', [])
-        cache['simon_user_input'] = st.session_state.get('simon_user_input', [])
-        cache['simon_status'] = st.session_state.get('simon_status', 'start')
-        cache['simon_level'] = st.session_state.get('simon_level', 1)
-        cache['simon_ranking'] = st.session_state.get('simon_ranking', [])
-        cache['daily_logs'] = st.session_state.get('daily_logs', [])
-        cache['last_jira_number'] = st.session_state.get('last_jira_number', "")
-        
-        # Salva estados dos checkboxes
-        check_states = {}
-        for nome in CONSULTORES:
-            check_states[nome] = st.session_state.get(f'check_{nome}', False)
-        cache['check_states'] = check_states
-    except Exception as e:
-        print(f"❌ Erro ao salvar cache: {e}")
-
-def load_from_cache():
-    """Carrega o estado do cache global"""
-    cache = get_global_cache()
-    return cache.copy()
-
-# ============================================
-# FUNÇÕES AUXILIARES
-# ============================================
-
-import json
-from pathlib import Path
-
-# Arquivo para persistência
-STATE_FILE = Path("bastao_state.json")
-
-def save_state_to_file():
-    """Salva o estado atual em arquivo JSON"""
-    try:
-        state_data = {
-            'bastao_queue': st.session_state.bastao_queue,
-            'status_texto': st.session_state.status_texto,
-            'bastao_start_time': st.session_state.bastao_start_time.isoformat() if st.session_state.bastao_start_time else None,
-            'bastao_counts': st.session_state.bastao_counts,
-            'auxilio_ativo': st.session_state.auxilio_ativo,
-            'simon_ranking': st.session_state.simon_ranking,
-            'last_jira_number': st.session_state.last_jira_number,
-            'check_states': {nome: st.session_state.get(f'check_{nome}', False) for nome in CONSULTORES}
-        }
-        
-        with open(STATE_FILE, 'w', encoding='utf-8') as f:
-            json.dump(state_data, f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        print(f"Erro ao salvar estado: {e}")
-
-def load_state_from_file():
-    """Carrega o estado do arquivo JSON"""
-    try:
-        if STATE_FILE.exists():
-            with open(STATE_FILE, 'r', encoding='utf-8') as f:
-                return json.load(f)
-    except Exception as e:
-        print(f"Erro ao carregar estado: {e}")
-    return None
-
-def format_time_duration(duration):
-    if not isinstance(duration, timedelta): return '--:--:--'
-    s = int(duration.total_seconds())
-    h, s = divmod(s, 3600)
-    m, s = divmod(s, 60)
-    return f'{h:02}:{m:02}:{s:02}'
-
-def init_session_state():
-    """Inicializa o estado da sessão carregando do cache"""
-    # Carrega dados persistidos do cache
-    cached_data = load_from_cache()
     
-    # Lista de chaves para inicializar
-    keys_to_init = [
-        'bastao_queue', 'status_texto', 'bastao_start_time', 
-        'bastao_counts', 'rotation_gif_start_time', 'gif_warning',
-        'auxilio_ativo', 'active_view', 'chamado_guide_step',
-        'simon_sequence', 'simon_user_input', 'simon_status',
-        'simon_level', 'simon_ranking', 'daily_logs', 'last_jira_number'
-    ]
-    
-    # Inicializa cada chave do cache no session_state
-    for key in keys_to_init:
+    for key, default in defaults.items():
         if key not in st.session_state:
-            st.session_state[key] = cached_data.get(key)
+            st.session_state[key] = default
     
-    # Restaura estados dos checkboxes
-    check_states = cached_data.get('check_states', {})
     for nome in CONSULTORES:
-        checkbox_key = f'check_{nome}'
-        if checkbox_key not in st.session_state:
-            st.session_state[checkbox_key] = check_states.get(nome, False)
+        if f'check_{nome}' not in st.session_state:
+            st.session_state[f'check_{nome}'] = False
 
 def find_next_holder_index(current_index, queue):
     if not queue: return -1
@@ -261,8 +173,8 @@ def toggle_queue(consultor):
             st.session_state.status_texto[consultor] = ''
 
     check_and_assume_baton()
-    save_to_cache()  # ← SALVA O ESTADO
-    save_to_cache()  # ← SALVA NO CACHE
+
+
 
 def rotate_bastao():
     """Passa o bastão para o próximo consultor (SEM PRECISAR SELECIONAR)"""
@@ -305,8 +217,10 @@ def rotate_bastao():
         st.session_state.bastao_counts[current_holder] = st.session_state.bastao_counts.get(current_holder, 0) + 1
         st.session_state.rotation_gif_start_time = datetime.now()
         
-        save_to_cache()  # ← SALVA NO CACHE
-        st.success(f"🎉 Bastão passou de **{current_holder}** para **{next_holder}**!")
+        # Salva mensagem para exibir na área principal
+        st.session_state.success_message = f"🎉 Bastão passou de **{current_holder}** para **{next_holder}**!"
+        st.session_state.success_message_time = datetime.now()
+        
         st.rerun()
     else:
         st.warning('⚠️ Não há próximo(a) consultor(a) elegível na fila.')
@@ -353,7 +267,7 @@ def update_status(new_status_part, force_exit_queue=False):
     if was_holder and should_exit_queue:
         check_and_assume_baton()
     
-    save_to_cache()  # ← SALVA NO CACHE
+
 
 def leave_specific_status(consultor, status_type_to_remove):
     st.session_state.gif_warning = False
@@ -365,7 +279,7 @@ def leave_specific_status(consultor, status_type_to_remove):
         new_status = 'Indisponível'
     st.session_state.status_texto[consultor] = new_status
     check_and_assume_baton()
-    save_to_cache()  # ← SALVA NO CACHE
+
 
 def enter_from_indisponivel(consultor):
     st.session_state.gif_warning = False
@@ -374,7 +288,7 @@ def enter_from_indisponivel(consultor):
     st.session_state[f'check_{consultor}'] = True
     st.session_state.status_texto[consultor] = ''
     check_and_assume_baton()
-    save_to_cache()  # ← SALVA NO CACHE
+
 
 def render_fireworks():
     fireworks_css = """
@@ -645,6 +559,16 @@ with col_principal:
     
     st.markdown("###")
     st.header("Próximos da Fila")
+    
+    # Exibir mensagem de sucesso se existir
+    if st.session_state.get('success_message') and st.session_state.get('success_message_time'):
+        elapsed = (datetime.now() - st.session_state.success_message_time).total_seconds()
+        if elapsed < 10:  # Mostra por 10 segundos
+            st.success(st.session_state.success_message)
+        else:
+            st.session_state.success_message = None
+            st.session_state.success_message_time = None
+    
     if proximo:
         st.markdown(f'### 1º: **{proximo}**')
     if restante:
