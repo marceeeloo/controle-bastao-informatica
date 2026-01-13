@@ -32,7 +32,7 @@ CONSULTORES = sorted([
 ])
 
 # --- Constantes de Opções ---
-REG_USUARIO_OPCOES = ["Cartório", "Externo"]
+REG_USUARIO_OPCOES = ["Cartório", "Gabinete", "Externo"]
 REG_SISTEMA_OPCOES = ["Conveniados", "Outros", "Eproc", "Themis", "JPE", "SIAP"]
 REG_CANAL_OPCOES = ["Presencial", "Telefone", "Email", "Whatsapp", "Outros"]
 REG_DESFECHO_OPCOES = ["Resolvido - Informática", "Escalonado"]
@@ -521,7 +521,7 @@ def gerar_html_relatorio(logs_filtrados):
                 <div class="campo-label">⏱️ Tempo Total:</div>
                 <div class="campo-valor">{log.get('tempo', 'N/A')}</div>
             </div>
-            <div class="campo">
+            <div class="campo
                 <div class="campo-label">📝 Motivo:</div>
                 <div class="campo-valor">{log.get('motivo', 'N/A')}</div>
             </div>
