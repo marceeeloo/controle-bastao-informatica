@@ -58,6 +58,32 @@ def format_time_duration(duration):
     m, s = divmod(s, 60)
     return f'{h:02}:{m:02}:{s:02}'
 
+
+def apply_modern_styles():
+    """Aplica estilos CSS modernos"""
+    st.markdown("""<style>
+    .main{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:2rem}
+    .stButton>button{border-radius:12px!important;font-weight:600!important;padding:.75rem 1.5rem!important;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)!important;transition:all .3s!important}
+    .stButton>button:hover{transform:translateY(-2px)!important;box-shadow:0 10px 15px -3px rgba(0,0,0,.1)!important}
+    .stButton>button[kind="primary"]{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)!important;color:#fff!important;border:none!important}
+    .stSelectbox>div>div,.stTextInput>div>div,.stTextArea>div>div{border-radius:12px!important;border:2px solid #e2e8f0!important;transition:all .2s!important}
+    .stSelectbox>div>div:focus-within,.stTextInput>div>div:focus-within{border-color:#667eea!important;box-shadow:0 0 0 3px rgba(102,126,234,.1)!important}
+    .stSuccess{background:linear-gradient(135deg,rgba(16,185,129,.1) 0%,rgba(5,150,105,.1) 100%)!important;border-left:4px solid #10b981!important;border-radius:12px!important}
+    .stWarning{background:linear-gradient(135deg,rgba(245,158,11,.1) 0%,rgba(217,119,6,.1) 100%)!important;border-left:4px solid #f59e0b!important;border-radius:12px!important}
+    .stError{background:linear-gradient(135deg,rgba(239,68,68,.1) 0%,rgba(220,38,38,.1) 100%)!important;border-left:4px solid #ef4444!important;border-radius:12px!important}
+    .streamlit-expanderHeader{border-radius:12px!important;background:#fff!important;border:2px solid #e2e8f0!important;padding:1rem!important;transition:all .2s!important;box-shadow:0 1px 3px 0 rgba(0,0,0,.1)!important}
+    .streamlit-expanderHeader:hover{border-color:#667eea!important;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)!important}
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:#f1f5f9;border-radius:10px}
+    ::-webkit-scrollbar-thumb{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:10px;border:2px solid #f1f5f9}
+    hr{border:none!important;height:2px!important;background:linear-gradient(90deg,transparent 0%,#e2e8f0 50%,transparent 100%)!important;margin:2rem 0!important}
+    .dataframe{border-radius:12px!important;overflow:hidden!important;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)!important}
+    .dataframe thead tr th{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)!important;color:#fff!important;font-weight:600!important;padding:1rem!important}
+    .dataframe tbody tr:nth-child(even){background-color:#f8fafc!important}
+    .dataframe tbody tr:hover{background-color:rgba(102,126,234,.05)!important}
+    </style>""", unsafe_allow_html=True)
+
+
 def init_session_state():
     """Inicializa o estado da sessão"""
     defaults = {
@@ -664,6 +690,7 @@ def toggle_view(view_name):
 
 st.set_page_config(page_title="Controle Bastão Informática 2026", layout="wide", page_icon="🥂")
 init_session_state()
+apply_modern_styles()
 st.components.v1.html("<script>window.scrollTo(0, 0);</script>", height=0)
 render_fireworks()
 
