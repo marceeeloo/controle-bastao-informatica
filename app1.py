@@ -134,6 +134,13 @@ def format_time_duration(duration):
 
 def init_session_state():
     """Inicializa o estado da sessão"""
+    # Se já foi inicializado, não fazer nada
+    if 'initialized' in st.session_state:
+        return
+    
+    # Marcar como inicializado
+    st.session_state.initialized = True
+    
     # Tentar carregar estado salvo
     if load_state():
         return  # Estado carregado com sucesso
