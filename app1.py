@@ -14,21 +14,22 @@ import os
 
 # --- Constantes de Colaboradores ---
 Colaboradores = sorted([
-    "Alex Paulo da Silva",
-    "Dirceu Gonçalves Siqueira Neto",
-    "Douglas de Souza Gonçalves",
-    "Farley Leandro de Oliveira Juliano", 
-    "Gleis da Silva Rodrigues",
-    "Hugo Leonardo Murta",
-    "Igor Dayrell Gonçalves Correa",
-    "Jerry Marcos dos Santos Neto",
-    "Jonatas Gomes Saraiva",
-    "Leandro Victor Catharino",
-    "Luiz Henrique Barros Oliveira",
+    "Frederico Augusto Costa Gonçalves",
+    "Ramon Shander de Almeida",
+    "Marcelo Batista Amaral	",
+    "Rodrigo Marinho Marques", 
+    "Otávio Reis",
+    "Judson Heleno Faleiro",
+    "Roner Ribeiro Júnior",
+    "Warley Roberto de Oliveira Cruz",
+    "Marcio Rodrigues Alves",
+    "Igor Eduardo Martins",
+    "Leonardo goncalves fleury",
     "Marcelo dos Santos Dutra",
-    "Marina Silva Marques",
-    "Marina Torres do Amaral",
-    "Vanessa Ligiane Pimenta Santos"
+    "Daniely Cristina Cunha Mesquita",
+    "Celso Daniel Vilano Cardoso",
+    "Pollyanna Silva Pereira",
+    "Cinthia Mery Facion"
 ])
 
 # --- Constantes de Opções ---
