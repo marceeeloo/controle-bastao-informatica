@@ -918,29 +918,14 @@ st.components.v1.html("<script>window.scrollTo(0, 0);</script>", height=0)
 
 # ==================== HEADER ====================
 st.markdown("""
-<div style="background: white; padding: 1.5rem 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-bottom: 3px solid #2563eb;">
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-        <div>
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <div style="font-size: 2.5rem;">🥂</div>
-                <div>
-                    <h1 style="color: #0f172a; margin: 0; font-size: 1.75rem; font-weight: 600;">
-                        Controle de Bastão
-                    </h1>
-                    <p style="color: #64748b; margin: 0.25rem 0 0 0; font-size: 0.875rem; font-weight: 500;">
-                        Setor de Informática • TJMG
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div style="text-align: right;">
-            <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
-                Ano
-            </div>
-            <div style="font-size: 1.5rem; font-weight: 700; color: #2563eb;">
-                2026
-            </div>
-        </div>
+<div style="background: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-bottom: 3px solid #2563eb;">
+    <div style="text-align: center;">
+        <h1 style="color: #0f172a; margin: 0; font-size: 2rem; font-weight: 600; letter-spacing: -0.02em;">
+            Controle de Bastão
+        </h1>
+        <p style="color: #64748b; margin: 0.5rem 0 0 0; font-size: 0.875rem; font-weight: 500;">
+            Setor de Informática • TJMG • 2026
+        </p>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -1004,17 +989,18 @@ with col_principal:
     if responsavel:
         st.markdown(f"""
         <div style="background: white; border: 2px solid #e2e8f0; padding: 2rem; border-radius: 12px; margin-bottom: 1.5rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);">
-            <div style="display: flex; align-items: center; gap: 1.5rem;">
-                <div style="background: #2563eb; width: 80px; height: 80px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 48px;">
-                    🥂
+            <div>
+                <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 0.75rem;">
+                    Responsável Atual
                 </div>
-                <div style="flex: 1;">
-                    <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 0.5rem;">
-                        Responsável Atual
-                    </div>
-                    <div style="font-size: 1.875rem; font-weight: 700; color: #0f172a; line-height: 1.2;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 2rem; font-weight: 700; color: #0f172a; line-height: 1.2;">
                         {responsavel}
                     </div>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0; opacity: 0.6;">
+                        <rect x="10" y="2" width="4" height="20" rx="2" fill="#2563eb"/>
+                        <circle cx="12" cy="3" r="2" fill="#2563eb"/>
+                    </svg>
                 </div>
             </div>
         </div>
