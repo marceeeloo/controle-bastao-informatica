@@ -351,7 +351,6 @@ def init_session_state():
         'bastao_start_time': None,
         'bastao_counts': {nome: 0 for nome in COLABORADORES},
         'active_view': None,
-        'chamado_guide_step': 0,
         'simon_sequence': [],
         'simon_user_input': [],
         'simon_status': 'start',
@@ -882,13 +881,6 @@ def handle_simon_game():
         df_rank = pd.DataFrame(ranking)
         st.table(df_rank)
 
-def set_chamado_step(step_num):
-    st.session_state.chamado_guide_step = step_num
-
-def handle_chamado_submission():
-    st.toast("Rascunho salvo localmente!", icon="✅")
-    st.session_state.chamado_guide_step = 0
-
 def manual_rerun():
     st.rerun()
 
@@ -897,8 +889,6 @@ def toggle_view(view_name):
         st.session_state.active_view = None
     else:
         st.session_state.active_view = view_name
-        if view_name == 'chamados':
-            st.session_state.chamado_guide_step = 1
 
 # ============================================
 # INTERFACE PRINCIPAL
@@ -1083,42 +1073,20 @@ with col_principal:
     st.markdown("---")
     
     # Ferramentas
+    st.markdown("### 🛠️ Ferramentas")
+    
     c_tool1, c_tool2, c_tool3 = st.columns(3)
     c_tool4, c_tool5, c_tool6 = st.columns(3)
     
-    c_tool1.button("🆘 Chamados", help="Guia de Abertura de Chamados", use_container_width=True, on_click=toggle_view, args=("chamados",))
-    c_tool2.button("📝 Atendimento", help="Registrar Atendimento (Local)", use_container_width=True, on_click=toggle_view, args=("atendimentos",))
-    c_tool3.button("⏰ H. Extras", help="Registrar Horas Extras (Local)", use_container_width=True, on_click=toggle_view, args=("hextras",))
+    c_tool1.button("📝 Atendimento", help="Registrar Atendimento", use_container_width=True, on_click=toggle_view, args=("atendimentos",))
+    c_tool2.button("⏰ H. Extras", help="Registrar Horas Extras", use_container_width=True, on_click=toggle_view, args=("hextras",))
+    c_tool3.button("🐛 Erro/Novidade", help="Relatar Erro ou Novidade", use_container_width=True, on_click=toggle_view, args=("erro_novidade",))
     
-    c_tool4.button("🧠 Descanso", help="Jogo e Ranking", use_container_width=True, on_click=toggle_view, args=("descanso",))
-    c_tool5.button("🐛 Erro/Novidade", help="Relatar Erro (Local)", use_container_width=True, on_click=toggle_view, args=("erro_novidade",))
-    c_tool6.button("📊 Relatórios", help="Ver Registros Salvos", use_container_width=True, on_click=toggle_view, args=("relatorios",))
+    c_tool4.button("📊 Relatórios", help="Ver Registros Salvos", use_container_width=True, on_click=toggle_view, args=("relatorios",))
+    c_tool5.button("🧠 Descanso", help="Jogo e Ranking", use_container_width=True, on_click=toggle_view, args=("descanso",))
     
     # Views das ferramentas
-    if st.session_state.active_view == "chamados":
-        with st.container(border=True):
-            st.header("Guia de Abertura de Chamados")
-            guide_step = st.session_state.get('chamado_guide_step', 1)
-            
-            if guide_step == 1:
-                st.subheader("📄 Passo 1: Testes Iniciais")
-                st.markdown("Antes de abrir o chamado, realize os procedimentos de suporte e testes necessários.")
-                st.button("Próximo (Passo 2) ➡️", on_click=set_chamado_step, args=(2,))
-            elif guide_step == 2:
-                st.subheader("PASSO 2: Checklist de Abertura")
-                st.markdown("**1. Dados do Usuário**\n**2. Dados do Processo**\n**3. Descrição do Erro**\n**4. Prints/Vídeo**")
-                st.button("Próximo (Passo 3) ➡️", on_click=set_chamado_step, args=(3,))
-            elif guide_step == 3:
-                st.subheader("PASSO 3: Registrar e Informar")
-                st.markdown("Envie e-mail ao usuário informando o número do chamado.")
-                st.button("Próximo (Campo) ➡️", on_click=set_chamado_step, args=(4,))
-            elif guide_step == 4:
-                st.subheader("Campo de Digitação do Chamado")
-                st.text_area("Rascunho do Chamado:", height=300, key="chamado_textarea", label_visibility="collapsed")
-                if st.button("Salvar Rascunho Localmente", on_click=handle_chamado_submission, use_container_width=True, type="primary"):
-                    pass
-    
-    elif st.session_state.active_view == "atendimentos":
+    if st.session_state.active_view == "atendimentos":
         with st.container(border=True):
             st.markdown("### Registro de Atendimento (Local)")
             at_data = st.date_input("Data:", value=date.today(), format="DD/MM/YYYY", key="at_data")
