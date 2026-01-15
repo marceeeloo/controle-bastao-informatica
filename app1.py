@@ -94,7 +94,7 @@ def load_state():
 
 
 def apply_modern_styles():
-    """Aplica design profissional moderno"""
+    """Aplica design profissional moderno com suporte a dark mode"""
     st.markdown("""<style>
     /* Importar fonte moderna */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -104,6 +104,7 @@ def apply_modern_styles():
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
     }
     
+    /* ==================== MODO CLARO ==================== */
     .main {
         background: #f1f5f9 !important;
         padding: 1.5rem !important;
@@ -324,6 +325,86 @@ def apply_modern_styles():
     @media (max-width: 768px) {
         .block-container {
             padding: 0.5rem !important;
+        }
+    }
+    
+    /* ==================== MODO ESCURO ==================== */
+    @media (prefers-color-scheme: dark) {
+        .main {
+            background: #0f172a !important;
+        }
+        
+        /* Botões no dark mode */
+        .stButton > button {
+            background: #1e293b !important;
+            color: #f1f5f9 !important;
+            border-color: #334155 !important;
+        }
+        
+        .stButton > button:hover {
+            background: #334155 !important;
+            border-color: #475569 !important;
+        }
+        
+        .stButton > button[kind="primary"] {
+            background: #2563eb !important;
+            color: white !important;
+        }
+        
+        /* Inputs no dark mode */
+        .stSelectbox > div > div,
+        .stTextInput > div > div,
+        .stTextArea > div > div {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #f1f5f9 !important;
+        }
+        
+        /* Headers no dark mode */
+        h1, h2, h3 {
+            color: #f1f5f9 !important;
+        }
+        
+        /* Expanders no dark mode */
+        .streamlit-expanderHeader {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #f1f5f9 !important;
+        }
+        
+        .streamlit-expanderHeader:hover {
+            background: #334155 !important;
+        }
+        
+        /* Sidebar no dark mode */
+        [data-testid="stSidebar"] {
+            background: #1e293b !important;
+            border-right-color: #334155 !important;
+        }
+        
+        /* Métricas no dark mode */
+        [data-testid="stMetricValue"] {
+            color: #f1f5f9 !important;
+        }
+        
+        [data-testid="stMetricLabel"] {
+            color: #94a3b8 !important;
+        }
+        
+        /* Tabelas no dark mode */
+        .dataframe {
+            border-color: #334155 !important;
+        }
+        
+        .dataframe thead th {
+            background: #1e293b !important;
+            color: #f1f5f9 !important;
+            border-bottom-color: #334155 !important;
+        }
+        
+        .dataframe tbody td {
+            border-bottom-color: #1e293b !important;
+            color: #e2e8f0 !important;
         }
     }
     </style>""", unsafe_allow_html=True)
@@ -901,12 +982,52 @@ st.components.v1.html("<script>window.scrollTo(0, 0);</script>", height=0)
 
 # ==================== HEADER ====================
 st.markdown("""
-<div style="background: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-bottom: 3px solid #2563eb;">
+<style>
+.header-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-bottom: 3px solid #2563eb;
+}
+
+.header-title {
+    color: #0f172a;
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.header-subtitle {
+    color: #64748b;
+    margin: 0.5rem 0 0 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+    .header-card {
+        background: #1e293b;
+    }
+    
+    .header-title {
+        color: #f1f5f9;
+    }
+    
+    .header-subtitle {
+        color: #94a3b8;
+    }
+}
+</style>
+
+<div class="header-card">
     <div style="text-align: center;">
-        <h1 style="color: #0f172a; margin: 0; font-size: 2rem; font-weight: 600; letter-spacing: -0.02em;">
+        <h1 class="header-title">
             Controle de Bastão
         </h1>
-        <p style="color: #64748b; margin: 0.5rem 0 0 0; font-size: 0.875rem; font-weight: 500;">
+        <p class="header-subtitle">
             Setor de Informática • TJMG • 2026
         </p>
     </div>
@@ -971,13 +1092,55 @@ if proximo_index != -1:
 with col_principal:
     if responsavel:
         st.markdown(f"""
-        <div style="background: white; border: 2px solid #e2e8f0; padding: 2rem; border-radius: 12px; margin-bottom: 1.5rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);">
+        <style>
+        .responsavel-card {{
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }}
+        
+        .responsavel-label {{
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+        }}
+        
+        .responsavel-nome {{
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.2;
+        }}
+        
+        @media (prefers-color-scheme: dark) {{
+            .responsavel-card {{
+                background: #1e293b;
+                border-color: #334155;
+            }}
+            
+            .responsavel-label {{
+                color: #94a3b8;
+            }}
+            
+            .responsavel-nome {{
+                color: #f1f5f9;
+            }}
+        }}
+        </style>
+        
+        <div class="responsavel-card">
             <div>
-                <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 0.75rem;">
+                <div class="responsavel-label">
                     Responsável Atual
                 </div>
                 <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div style="font-size: 2rem; font-weight: 700; color: #0f172a; line-height: 1.2;">
+                    <div class="responsavel-nome">
                         {responsavel}
                     </div>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0; opacity: 0.6;">
@@ -998,11 +1161,49 @@ with col_principal:
         
         with col_metric1:
             st.markdown(f"""
-            <div style="background: white; border: 1px solid #e2e8f0; padding: 1.25rem; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-                <div style="color: #64748b; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem;">
+            <style>
+            .metric-card {{
+                background: white;
+                border: 1px solid #e2e8f0;
+                padding: 1.25rem;
+                border-radius: 10px;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            }}
+            
+            .metric-label {{
+                color: #64748b;
+                font-size: 0.875rem;
+                font-weight: 500;
+                margin-bottom: 0.5rem;
+            }}
+            
+            .metric-value {{
+                color: #0f172a;
+                font-size: 1.5rem;
+                font-weight: 700;
+            }}
+            
+            @media (prefers-color-scheme: dark) {{
+                .metric-card {{
+                    background: #1e293b;
+                    border-color: #334155;
+                }}
+                
+                .metric-label {{
+                    color: #94a3b8;
+                }}
+                
+                .metric-value {{
+                    color: #f1f5f9;
+                }}
+            }}
+            </style>
+            
+            <div class="metric-card">
+                <div class="metric-label">
                     ⏱️ Tempo com Bastão
                 </div>
-                <div style="color: #0f172a; font-size: 1.5rem; font-weight: 700;">
+                <div class="metric-value">
                     {format_time_duration(duration)}
                 </div>
             </div>
@@ -1011,20 +1212,46 @@ with col_principal:
         with col_metric2:
             rodadas = st.session_state.bastao_counts.get(responsavel, 0)
             st.markdown(f"""
-            <div style="background: white; border: 1px solid #e2e8f0; padding: 1.25rem; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-                <div style="color: #64748b; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem;">
+            <div class="metric-card">
+                <div class="metric-label">
                     🔄 Rodadas Hoje
                 </div>
-                <div style="color: #0f172a; font-size: 1.5rem; font-weight: 700;">
+                <div class="metric-value">
                     {rodadas}
                 </div>
             </div>
             """, unsafe_allow_html=True)
     else:
         st.markdown("""
-        <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 1.5rem; border-radius: 10px; text-align: center;">
+        <style>
+        .empty-card {{
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }}
+        
+        .empty-text {{
+            color: #1e40af;
+            font-weight: 500;
+        }}
+        
+        @media (prefers-color-scheme: dark) {{
+            .empty-card {{
+                background: #1e293b;
+                border-color: #334155;
+            }}
+            
+            .empty-text {{
+                color: #60a5fa;
+            }}
+        }}
+        </style>
+        
+        <div class="empty-card">
             <div style="font-size: 2rem; margin-bottom: 0.5rem;">👥</div>
-            <div style="color: #1e40af; font-weight: 500;">Nenhum colaborador com o bastão</div>
+            <div class="empty-text">Nenhum colaborador com o bastão</div>
         </div>
         """, unsafe_allow_html=True)
     
