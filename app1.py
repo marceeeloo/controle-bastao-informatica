@@ -1341,7 +1341,6 @@ with col_disponibilidade:
         'saida': [],
         'ausente': [],
         'atividade_especifica': [],
-        'reuniao_especifica': [],
         'indisponivel': []
     }
     
@@ -1362,10 +1361,6 @@ with col_disponibilidade:
         elif status == 'Indisponível':
             if nome not in st.session_state.bastao_queue:
                 ui_lists['indisponivel'].append(nome)
-        
-                ui_lists['sessao_especifica'].append((nome, match.group(1).split('|')[0].strip()))
-        
-                ui_lists['reuniao_especifica'].append((nome, match.group(1).split('|')[0].strip()))
         
         if 'Atividade:' in status:
             match = re.search(r'Atividade: (.*)', status)
