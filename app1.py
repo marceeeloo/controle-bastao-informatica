@@ -1059,29 +1059,37 @@ with col_principal:
     st.markdown("#### ")
     st.markdown("**Ações:**")
     
-    row1_c1, row1_c2 = st.columns(2)
-    row2_c1, row2_c2, row2_c3, row2_c4, row2_c5 = st.columns(5)
+    # Passar Bastão (destaque no topo)
+    st.button('🎯 Passar', on_click=rotate_bastao, use_container_width=True, help='Passa o bastão', type='primary')
     
-    row1_c1.button('🎯 Passar', on_click=rotate_bastao, use_container_width=True, help='Passa o bastão.', type='primary')
+    st.markdown("##")
     
-    row2_c1.button('🍽️ Almoço', on_click=update_status, args=('Almoço', True,), use_container_width=True)
-    row2_c2.button('🚶 Saída', on_click=update_status, args=('Saída rápida', True,), use_container_width=True)
-    row2_c3.button('👤 Ausente', on_click=update_status, args=('Ausente', True,), use_container_width=True)
+    # Status: Almoço, Saída, Ausente
+    row1_c1, row1_c2, row1_c3 = st.columns(3)
     
-    st.markdown("####")
-    st.button('🔄 Atualizar (Manual)', on_click=manual_rerun, use_container_width=True)
+    row1_c1.button('🍽️ Almoço', on_click=update_status, args=('Almoço', True,), use_container_width=True)
+    row1_c2.button('🚶 Saída', on_click=update_status, args=('Saída rápida', True,), use_container_width=True)
+    row1_c3.button('👤 Ausente', on_click=update_status, args=('Ausente', True,), use_container_width=True)
+    
+    st.markdown("##")
+    
+    # Atualizar
+    st.button('🔄 Atualizar', on_click=manual_rerun, use_container_width=True)
+    
     st.markdown("---")
     
     # Ferramentas
     st.markdown("### 🛠️ Ferramentas")
     
-    c_tool1, c_tool2, c_tool3, c_tool4, c_tool5 = st.columns(5)
+    col1, col2, espacador, col3, col4 = st.columns([1, 1, 0.3, 1, 1])
     
-    c_tool1.button("📝 Atendimento", help="Registrar Atendimento", use_container_width=True, on_click=toggle_view, args=("atendimentos",))
-    c_tool2.button("⏰ H. Extras", help="Registrar Horas Extras", use_container_width=True, on_click=toggle_view, args=("hextras",))
-    c_tool3.button("🐛 Erro/Novidade", help="Relatar Erro ou Novidade", use_container_width=True, on_click=toggle_view, args=("erro_novidade",))
-    c_tool4.button("📊 Relatórios", help="Ver Registros Salvos", use_container_width=True, on_click=toggle_view, args=("relatorios",))
-    c_tool5.button("🧠 Descanso", help="Jogo e Ranking", use_container_width=True, on_click=toggle_view, args=("descanso",))
+    col1.button("📝 Atendimento", help="Registrar Atendimento", use_container_width=True, on_click=toggle_view, args=("atendimentos",))
+    col2.button("🐛 Erro/Novidade", help="Relatar Erro ou Novidade", use_container_width=True, on_click=toggle_view, args=("erro_novidade",))
+    
+    # Espaçador vazio
+    
+    col3.button("📊 Relatórios", help="Ver Registros Salvos", use_container_width=True, on_click=toggle_view, args=("relatorios",))
+    col4.button("🧠 Descanso", help="Jogo e Ranking", use_container_width=True, on_click=toggle_view, args=("descanso",))
     
     # Views das ferramentas
     if st.session_state.active_view == "atendimentos":
@@ -1114,29 +1122,6 @@ with col_principal:
                 else:
                     st.error("Selecione um colaborador.")
     
-    elif st.session_state.active_view == "hextras":
-        with st.container(border=True):
-            st.markdown("### Registro de Horas Extras (Local)")
-            he_data = st.date_input("Data:", value=date.today(), format="DD/MM/YYYY")
-            he_inicio = st.time_input("Horário de Início:", value=dt_time(18, 0))
-            he_tempo = st.text_input("Tempo Total (ex: 2h30):")
-            he_motivo = st.text_input("Motivo da Hora Extra:")
-            
-            if st.button("Salvar HE Localmente", type="primary", use_container_width=True):
-                colaborador = st.session_state.colaborador_selectbox
-                if colaborador and colaborador != "Selecione um nome":
-                    st.success("✅ Horas extras registradas localmente!")
-                    he_entry = {
-                        'timestamp': datetime.now(),
-                        'colaborador': colaborador,
-                        'data': he_data,
-                        'inicio': he_inicio,
-                        'tempo': he_tempo,
-                        'motivo': he_motivo
-                    }
-                    st.session_state.daily_logs.append(he_entry)
-                else:
-                    st.error("Selecione um colaborador.")
     
     elif st.session_state.active_view == "descanso":
         with st.container(border=True):
@@ -1192,7 +1177,7 @@ with col_principal:
                 with col_f1:
                     tipo_filtro = st.selectbox(
                         "Tipo de Registro:",
-                        ["Todos", "Atendimentos", "Horas Extras", "Erros/Novidades"]
+                        ["Todos", "Atendimentos", "Atendimentos", "Erros/Novidades"]
                     )
                 
                 with col_f2:
@@ -1209,7 +1194,7 @@ with col_principal:
                 
                 if tipo_filtro == "Atendimentos":
                     logs_filtrados = [l for l in logs_filtrados if 'usuario' in l]
-                elif tipo_filtro == "Horas Extras":
+                elif tipo_filtro == "Atendimentos":
                     logs_filtrados = [l for l in logs_filtrados if 'inicio' in l and 'tempo' in l]
                 elif tipo_filtro == "Erros/Novidades":
                     logs_filtrados = [l for l in logs_filtrados if 'titulo' in l and 'relato' in l]
